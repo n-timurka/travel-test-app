@@ -47,8 +47,10 @@ services:
       - ./ui:/app
       - /app/node_modules
       - /app/.nuxt
+    tmpfs: /tmp
     networks:
       - weroad
 
 networks:
   weroad:
+    driver: bridge

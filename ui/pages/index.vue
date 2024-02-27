@@ -3,7 +3,7 @@ import { type TravelType } from "@/types"
 
 const { $api } = useNuxtApp()
 
-const { data: travels, pending } = await useAsyncData<TravelType[]>(() => $api('/travels'))
+const { data: travels, pending } = await useAsyncData<TravelType[]>('travels', () => $api('/travels'))
 </script>
 
 <template>

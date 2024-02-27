@@ -8,6 +8,8 @@ import { OrdersEntity } from './entities/orders.entity';
 import OrderStatus from './enums/order-status.enum';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 const mockOrder = {
   id: 'cbf304ae-a335-43fa-9e56-811612dcb601',
@@ -31,6 +33,8 @@ describe('OrdersController', () => {
       controllers: [OrdersController],
       providers: [
         OrdersService,
+        EventEmitter2,
+        SchedulerRegistry,
         {
           provide: ordersRepositoryToken,
           useClass: Repository,
@@ -71,7 +75,7 @@ describe('OrdersController', () => {
   });
 
   describe('findOne', () => {
-    it('should return one news item', async () => {
+    it('should return one order', async () => {
       jest.spyOn(service, 'findOne').mockResolvedValueOnce(mockOrder);
 
       expect(await controller.findOne(mockOrder.id)).toBe(mockOrder);
@@ -79,7 +83,7 @@ describe('OrdersController', () => {
   });
 
   describe('update', () => {
-    it('should update the news item', async () => {
+    it('should update the order', async () => {
       jest.spyOn(service, 'update').mockResolvedValueOnce(mockOrder);
 
       const dto = {

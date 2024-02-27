@@ -36,7 +36,7 @@ export class TravelsEntity {
   booked: number;
 
   @Column('json')
-  moods: string;
+  moods: Record<string, number>;
 
   @CreateDateColumn({
     name: 'created_at',

@@ -7,6 +7,8 @@ import { OrdersService } from './orders.service';
 import OrderStatus from './enums/order-status.enum';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 const mockOrder = {
   id: 'cbf304ae-a335-43fa-9e56-811612dcb601',
@@ -28,6 +30,8 @@ describe('OrdersService', () => {
       imports: [ConfigModule.forRoot({ isGlobal: true })],
       providers: [
         OrdersService,
+        EventEmitter2,
+        SchedulerRegistry,
         {
           provide: ordersRepositoryToken,
           useClass: Repository,
@@ -59,12 +63,12 @@ describe('OrdersService', () => {
     } as CreateOrderDto;
     const result = await service.create(dto);
 
-    expect(result).toBe(mockOrder);
+    expect(result).toEqual(expect.objectContaining(dto));
   });
 
   describe('findOne', () => {
     it('should not return an order item', async () => {
-      jest.spyOn(repository, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(null);
 
       const result = await service.findOne('1');
 
@@ -72,7 +76,7 @@ describe('OrdersService', () => {
     });
 
     it('should return an order item', async () => {
-      jest.spyOn(repository, 'findOneBy').mockResolvedValueOnce(mockOrder);
+      jest.spyOn(repository, 'findOne').mockResolvedValueOnce(mockOrder);
 
       const result = await service.findOne(mockOrder.id);
 
