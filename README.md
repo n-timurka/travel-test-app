@@ -1,5 +1,11 @@
 # Full stack Typescript hiring test
 
+## Installation
+- clone this repository
+- copy and rename file default.env to .env, change values if you need it
+- run docker-compose up --build
+- open http://localhost:3000 (or any url you provide in env) in your browser.
+
 ## Use case
 Implement a checkout process for WeRoad users to buy a Travel where:
 - the user can select a travel to book;
