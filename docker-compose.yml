@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: weroad-db
+    image: mariadb:11.3
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    ports:
+      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+    volumes:
+      - ./mysql:/var/lib/mysql:rw
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - weroad
+
+  api:
+    container_name: weroad-api
+    build: ./api
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - DB_HOST=$MYSQL_HOST
+      - DB_USER=$MYSQL_USER
+      - DB_PASSWORD=$MYSQL_PASSWORD
+      - DB_DATABASE=$MYSQL_DATABASE
+      - DB_PORT=$MYSQL_DOCKER_PORT
+    ports:
+      - $API_LOCAL_PORT:$API_DOCKER_PORT
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    networks:
+      - weroad
+
+  ui:
+    container_name: weroad-ui
+    build: ./ui
+    restart: unless-stopped
+    environment:
+      - API_BASE_URL=$API_URL
+    ports:
+      - $UI_LOCAL_PORT:$UI_DOCKER_PORT
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+      - /app/.nuxt
+    networks:
+      - weroad
+
+networks:
+  weroad:

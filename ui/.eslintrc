@@ -1,0 +1,5 @@
+{
+    "root": true,
+    // https://github.com/nuxt/eslint-config
+    "extends": ["@nuxt/eslint-config"]
+}

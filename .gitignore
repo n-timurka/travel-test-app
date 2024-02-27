@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+
+mysql
+
+.env
+.env.*
