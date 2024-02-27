@@ -6,7 +6,7 @@ import { object, string, number } from 'yup';
 const { $api } = useNuxtApp();
 const { slug } = useRoute().params;
 
-const { data: travel } = await useAsyncData<TravelType>((() => $api(`/travels/${slug}`)))
+const { data: travel } = await useAsyncData<TravelType>('travel', () => $api(`/travels/${slug}`))
 if (!travel.value) {
   throw createError({
     statusCode: 404,
@@ -24,7 +24,7 @@ const { defineField, meta, handleSubmit, isSubmitting } = useForm({
 const [seats] = defineField('seats');
 
 const onSubmit = handleSubmit(async (values) => {
-  const { data: order } = await useAsyncData<OrderType>(() => $api('/orders', {
+  const { data: order } = await useAsyncData<OrderType>('create-order', () => $api('/orders', {
       method: 'POST',
       body: {
         ...values,

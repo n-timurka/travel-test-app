@@ -1,31 +1,28 @@
 <script lang="ts" setup>
 const emits = defineEmits(['finish'])
 const props = defineProps<{
-    seconds: number,
+    deadline: Date,
 }>()
 
-const interval = ref()
-const seconds = ref(props.seconds)
-const time = computed(() => {
-    const min = `0${Math.floor(seconds.value / 60)}`.slice(0, 2);
-    const sec = `0${seconds.value % 60}`.slice(0, 2);
+const dayjs = useDayjs();
+const secondsLeft = ref(0)
 
-    return `${min}:${sec}`;
-})
+const countdown = () => {
+  secondsLeft.value = dayjs(props.deadline).diff(dayjs(), 'second');
 
-onMounted(() => {
-   interval.value = setInterval(function() {
-    if (seconds.value <= 0) {
-        clearInterval(interval.value);
-        emits('finish');
-    }
+  if (secondsLeft.value > 0) {
+    setTimeout(countdown, 1000);
+  } else {
+    emits('finish');
+  }
+}
 
-    seconds.value--;
-}, 1000);
-})
+const formattedTime = computed(() => `${Math.floor(secondsLeft.value / 60)}:${Math.floor(secondsLeft.value % 60)}`)
 
-onUnmounted(() => {
-    clearInterval(interval.value);
+watch(() => props.secondsLeft, () => {
+  countdown();
+}, {
+  immediate: true,
 });
 </script>
 
@@ -39,7 +36,7 @@ onUnmounted(() => {
       <span>You have to complete your booking</span>
     </div>
     <div class="text-red-600 font-semibold">
-      {{ time }}
+      {{ formattedTime }}
     </div>
   </div>
 </template>

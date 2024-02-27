@@ -9,8 +9,10 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
   ],
   runtimeConfig: {
+    serverApiUrl: process.env.API_SERVER_URL,
+
     public: {
-      apiUrl: process.env.API_BASE_URL,
+      apiUrl: process.env.API_CLIENT_URL,
     },
   },
 });

@@ -10,9 +10,7 @@ const props = defineProps<{
 
 const dayjs = useDayjs();
 const secondsLeft = computed(() => {
-  const final = dayjs(props.order.createdAt).utc().add(15, 'minute');
-
-  return final.diff(dayjs().utc(), "second")
+  return dayjs(props.order.createdAt).utc().add(15, 'minute').toDate();
 })
 
 const { meta, handleSubmit, isSubmitting } = useForm({
@@ -25,7 +23,7 @@ const { meta, handleSubmit, isSubmitting } = useForm({
 });
 
 const onSubmit = handleSubmit(async () => {
-  await useAsyncData<OrderType>(() => $api(`/orders/${props.order.id}`, {
+  await useAsyncData<OrderType>('finish-order', () => $api(`/orders/${props.order.id}`, {
       method: 'PATCH',
       body: {
         status: OrderStatusEnum.FINISHED,
@@ -36,7 +34,7 @@ const onSubmit = handleSubmit(async () => {
 });
 
 const stop = async () => {
-  await useAsyncData<OrderType>(() => $api(`/orders/${props.order.id}`, {
+  await useAsyncData<OrderType>('expire-order', () => $api(`/orders/${props.order.id}`, {
       method: 'PATCH',
       body: {
         status: OrderStatusEnum.EXPIRED,
@@ -100,10 +98,12 @@ const stop = async () => {
       </div>
 
       <div class="md:basis-1/3">
-        <OrderTimer
-          :seconds="secondsLeft"
-          @finish="stop"
-        />
+        <ClientOnly>
+          <OrderTimer
+            :deadline="secondsLeft"
+            @finish="stop"
+          />
+        </ClientOnly>
       </div>
     </div>
   </main>

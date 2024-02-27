@@ -1,10 +1,16 @@
 <script lang="ts" setup>
 import type { TravelType } from '~/types';
 
-const props = defineProps<{
-    travel: TravelType,
-    seats: number,
-}>()
+const props = defineProps({
+  travel: {
+    type: Object as PropType<TravelType>,
+    required: true,
+  },
+  seats: {
+    type: Number,
+    default: 0,
+  }
+})
 
 const { daysBetween, startingDate, endingDate } = useTravel(props.travel)
 </script>

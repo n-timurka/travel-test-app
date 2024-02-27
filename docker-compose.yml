@@ -40,7 +40,8 @@ services:
     build: ./ui
     restart: unless-stopped
     environment:
-      - API_BASE_URL=$API_URL
+      - API_CLIENT_URL=$API_CLIENT_URL
+      - API_SERVER_URL=$API_SERVER_URL
     ports:
       - $UI_LOCAL_PORT:$UI_DOCKER_PORT
     volumes:

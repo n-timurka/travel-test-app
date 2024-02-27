@@ -5,7 +5,7 @@ const { $api } = useNuxtApp()
 
 const { id } = useRoute().params
 
-const { data: order } = await useAsyncData<OrderType>(() => $api(`/orders/${id}`))
+const { data: order } = await useAsyncData<OrderType>('order', () => $api(`/orders/${id}`))
 if (!order.value) {
   throw createError({
     statusCode: 404,

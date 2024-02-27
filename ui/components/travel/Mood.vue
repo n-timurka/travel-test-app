@@ -7,7 +7,6 @@ defineProps({
     value: {
         type: Number,
         required: true,
-        validator: (v: number) => v > 0 && v < 100,
     },
     icon: {
         type: String,
