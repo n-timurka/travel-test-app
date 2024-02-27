@@ -1,0 +1,21 @@
+POST http://localhost:3001/orders HTTP/1.1
+content-type: application/json
+
+{
+    "email": "test@test.com",
+    "travelId": "4f4bd032-e7d4-402a-bdf6-aaf6be240d53",
+    "seats": 3,
+    "total": 1000
+}
+
+###
+GET http://localhost:3001/orders/e718902d-7de2-4841-bb3a-663a3980348a HTTP/1.1
+content-type: application/json
+
+###
+PATCH http://localhost:3001/orders/e718902d-7de2-4841-bb3a-663a3980348a HTTP/1.1
+content-type: application/json
+
+{
+    "status": "finished"
+}
